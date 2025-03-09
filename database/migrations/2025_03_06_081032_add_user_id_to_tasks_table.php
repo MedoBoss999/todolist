@@ -9,12 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
-        Schema::table('tasks', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        });
+        // Vérifie si la colonne n'existe pas avant de l'ajouter
+        if (!Schema::hasColumn('tasks', 'user_id')) {
+            Schema::table('tasks', function (Blueprint $table) {
+                $table->bigInteger('user_id')->unsigned()->nullable(false);
+            });
+        }
     }
+    
 
     /**
      * Reverse the migrations.
