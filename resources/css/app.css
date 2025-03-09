@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    color: rgb(10, 10, 10);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+}

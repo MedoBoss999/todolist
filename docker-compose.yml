@@ -1,0 +1,18 @@
+services:
+  app:
+    build:
+      context: .
+    networks:
+      - app-network
+
+  mailpit:
+    image: mailpit/mailpit:latest
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
