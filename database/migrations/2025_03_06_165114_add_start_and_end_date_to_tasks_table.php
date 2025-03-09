@@ -12,16 +12,19 @@ return new class extends Migration
     public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->date('start_date')->nullable();  // Ajouter start_date
-            $table->date('end_date')->nullable();    // Ajouter end_date
+            if (!Schema::hasColumn('tasks', 'start_date')) {
+                $table->date('start_date')->nullable();
+            }
+            if (!Schema::hasColumn('tasks', 'end_date')) {
+                $table->date('end_date')->nullable();
+            }
         });
     }
-    
+
     public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            $table->dropColumn('start_date');
-            $table->dropColumn('end_date');
+            $table->dropColumn(['start_date', 'end_date']);
         });
     }
     
