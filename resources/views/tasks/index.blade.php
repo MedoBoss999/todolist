@@ -9,8 +9,8 @@
     {{-- <link href="{{ asset('css/app.css') }}" rel="stylesheet"> --}}
     @vite('resources/css/app.css')
     @if (!Request::is('login') && !Request::is('register'))
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-@endif
+        <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    @endif
 
     <style>
         body {
@@ -125,46 +125,49 @@
         }
 
         /* Responsive Design */
-         @media screen and (max-width: 768px) {
-    table {
-        display: block;
-        overflow-x: auto;
-        white-space: nowrap;
-    }
-    header .btn-danger{
-        margin-left: 0;
-        margin-right: 0;
-        font-size: 16px;
-        margin-bottom: 10px;
-        margin-top: 0;
-        padding: 10px 0;
-        cursor: pointer;
-        left: 0;
-    }
-    header{
-        display: flex;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-    }
-    .btn {
-        font-size: 14px;
-        padding: 6px 10px;
-    } 
-        
-    .btn-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        align-items: center;
-    }
+        @media screen and (max-width: 768px) {
+            table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
 
-    .btn-retour {
-        margin-top: 15px;
-        width: 100%;
-        text-align: center;
-    }
-} 
+            header .btn-danger {
+                margin-left: 0;
+                margin-right: 0;
+                font-size: 16px;
+                margin-bottom: 10px;
+                margin-top: 0;
+                padding: 10px 0;
+                cursor: pointer;
+                left: 0;
+            }
+
+            header {
+                display: flex;
+                text-align: center;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 6px 10px;
+            }
+
+            .btn-container {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .btn-retour {
+                margin-top: 15px;
+                width: 100%;
+                text-align: center;
+            }
+        }
     </style>
 </head>
 
@@ -175,9 +178,9 @@
 
             <div class="entete">
                 @if (Auth::check())
-                    <h2>Bienvenue!</h2>
+                    <h3 class="text-3xl font-bold text-center mt-6 mb-4 leading-tight">Bienvenue!</h2>
                 @endif
-                <h1>Liste des Tâches</h1>
+                <h2 class="text-4xl font-bold text-center mt-6 mb-4 leading-tight">Planification de mes tâches</h1>
                 <a href="{{ route('tasks.create') }}" class="btn">Créer une Nouvelle Tâche</a>
             </div>
 
@@ -234,26 +237,32 @@
         </thead>
         <tbody>
             @if (isset($tasks))
-                @foreach ($tasks as $task)
-                    <tr>
-                        <td><a href="{{ route('tasks.show', $task->id) }}">{{ $task->title }}</a></td>
-                        <td class="px-4 py-2 hidden sm:table-cell">{{ $task->description }}</td>
-                        <td>{{ $task->status }}</td>
-                        <td>{{ $task->start_date }}</td>
-                        <td>{{ $task->start_time }}</td>
-                        <td class="px-4 py-2 hidden sm:table-cell">{{ $task->end_date }}</td>
-                        <td class="px-4 py-2 hidden sm:table-cell">{{ $task->end_time }}</td>
-                        <td>
-                            <a href="{{ route('tasks.edit', $task->id) }}" class="btn">Modifier</a>
-                            <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
-                                style="display:inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class=" btn-del">🗙</button>
-                            </form>
-                        </td>
-                    </tr>
-                @endforeach
+                @if ($tasks->isEmpty())
+                    <td colspan="4">Aucune tâche disponible. 
+                        veuillez en creer une nouvelle.</td>
+                    </td>
+                @else
+                    @foreach ($tasks as $task)
+                        <tr>
+                            <td><a href="{{ route('tasks.show', $task->id) }}">{{ $task->title }}</a></td>
+                            <td class="px-4 py-2 hidden sm:table-cell">{{ $task->description }}</td>
+                            <td>{{ $task->status }}</td>
+                            <td>{{ $task->start_date }}</td>
+                            <td>{{ $task->start_time }}</td>
+                            <td class="px-4 py-2 hidden sm:table-cell">{{ $task->end_date }}</td>
+                            <td class="px-4 py-2 hidden sm:table-cell">{{ $task->end_time }}</td>
+                            <td>
+                                <a href="{{ route('tasks.edit', $task->id) }}" class="btn">Modifier</a>
+                                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST"
+                                    style="display:inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class=" btn-del">🗙</button>
+                                </form>
+                            </td>
+                        </tr>
+                    @endforeach
+                @endif
             @else
                 <tr>
                     <td colspan="4">Aucune tâche disponible.
