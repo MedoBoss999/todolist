@@ -26,11 +26,11 @@ Route::get('/', function () {
 });
 
 // Dashboard accessible seulement après connexion et vérification
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::resource('tasks', TaskController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
 
 
 // Routes pour les tâches, protégées par l'authentification

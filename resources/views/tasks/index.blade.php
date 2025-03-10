@@ -148,6 +148,11 @@
                 text-align: center;
                 align-items: center;
                 justify-content: center;
+                flex-direction: column;
+                gap: 10px;
+                padding: 20px;
+                flex-direction: column;
+                
             }
 
             .btn {
@@ -173,6 +178,7 @@
 
 
 <body>
+    
     <header>
         <div class="container">
 
