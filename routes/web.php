@@ -31,18 +31,23 @@ Route::middleware(['auth'])->group(function () {
         return view('dashboard');
     })->name('dashboard');
 });
+Route::patch('/tasks/{task}/complete', [TaskController::class, 'markAsCompleted'])->name('tasks.complete');
+
 
 
 // Routes pour les tâches, protégées par l'authentification
 Route::middleware(['auth'])->group(function () {
     Route::get('/tasks', [TaskController::class, 'index'])->name('tasks.index');
     Route::get('/tasks/{task}/edit', [TaskController::class, 'edit'])->name('tasks.edit'); // ✅ Correction ici
+    Route::put('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update'); // ✅ Correction ici
     Route::get('/tasks/create', [TaskController::class, 'create'])->name('tasks.create'); // ✅ Correction ici
     Route::post('/tasks', [TaskController::class, 'store'])->name('tasks.store');
     Route::get('/tasks/{task}', [TaskController::class, 'show'])->name('tasks.show');
     Route::patch('/tasks/{task}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/tasks/{task}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-}); 
+    Route::post('/mark-task-completed/{task}', [TaskController::class, 'markAsCompleted']);
+    Route::get('/task-status/{task}', [TaskController::class, 'getTaskStatus']);
+});
 
 // Routes pour le profil utilisateur
 Route::middleware('auth')->group(function () {

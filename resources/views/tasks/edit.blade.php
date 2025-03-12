@@ -70,9 +70,9 @@
     <div class="container">
         <form action="{{ route('tasks.update', $task->id) }}" method="POST">
             @csrf
-            @method('PATCH')
-            <label for="name">Nom :</label>
-            <input type="text" id="name" name="name" value="{{ old('name', $task->name) }}" required>
+            @method('PUT')
+            <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" value="{{ old('title') }}" required>
             <label for="description">Description :</label>
             <textarea id="description" name="description" required>{{ old('description', $task->description) }}</textarea>
             <label for="status">Statut :</label>
@@ -93,5 +93,15 @@
         </form>
         <a href="{{ route('tasks.index') }}">Retour à la Liste des Projets</a>
     </div>
+    @if ($errors->any())
+    <div class="bg-red-500 text-white p-2 rounded">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+@endif
+        
 </body>
 </html>

@@ -6,7 +6,7 @@ services:
       - app-network
 
   mailpit:
-    image: mailpit/mailpit:latest
+    image: axllent/mailpit
     ports:
       - "1025:1025"  # SMTP
       - "8025:8025"  # Web UI

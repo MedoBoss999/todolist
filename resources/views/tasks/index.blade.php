@@ -135,12 +135,10 @@
             header .btn-danger {
                 margin-left: 0;
                 margin-right: 0;
-                font-size: 16px;
+                margin-top: 10px;
                 margin-bottom: 10px;
-                margin-top: 0;
-                padding: 10px 0;
-                cursor: pointer;
-                left: 0;
+                position: fixed;
+                z-index: 999;
             }
 
             header {
@@ -154,6 +152,7 @@
                 flex-direction: column;
                 
             }
+            
 
             .btn {
                 font-size: 14px;
@@ -181,6 +180,7 @@
     
     <header>
         <div class="container">
+            
 
             <div class="entete">
                 @if (Auth::check())
@@ -265,6 +265,16 @@
                                     @method('DELETE')
                                     <button type="submit" class=" btn-del">🗙</button>
                                 </form>
+                                <form method="POST" action="{{ route('tasks.complete', $task->id) }}">
+                                    @csrf
+                                    @method('PATCH')
+                                    {{-- <button type="submit" class="btn btn-primary">Marquer comme terminé</button> --}}
+                                    <button id="complete-button-{{ $task->id }}" 
+                                        class="text-white font-bold py-2 px-4 rounded bg-blue-500 hover:bg-blue-700"
+                                        onclick="markAsCompleted({{ $task->id }}, this)">
+                                    {{ $task->completed ? 'Terminé' : 'Marquer comme terminé' }}
+                                </button>
+                                </form>
                             </td>
                         </tr>
                     @endforeach
@@ -292,6 +302,57 @@
             {{ session('success') }}
         </div>
     @endif
+
+<script>
+const contentElement = document.getElementById('content');
+if (contentElement) 
+{
+
+    function markAsCompleted(taskId, button) {
+        // Empêcher la double soumission
+        if (button.disabled) return;
+        const contentElement = document.getElementById('content');
+        if (contentElement) {
+        // Mettre à jour l'état du bouton
+        button.textContent = 'Terminé';
+        button.classList.remove('bg-gray-500', 'hover:bg-blue-700');
+        button.classList.add('bg-gray-400', 'cursor-not-allowed');
+        button.disabled = true;
+
+        // Envoyer la requête AJAX pour marquer la tâche comme terminée
+        fetch(`/tasks/${taskId}/complete`, {
+            method: 'PATCH',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ completed: true })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.completed) {
+                console.log('Tâche marquée comme terminée');
+            } else {
+                alert('Une erreur s\'est produite.');
+                // Remettre l'état du bouton à son état initial en cas d'erreur
+                button.textContent = 'Marquer comme terminé';
+                button.classList.remove('bg-gray-400', 'cursor-not-allowed');
+                button.classList.add('bg-blue-500', 'hover:bg-blue-700');
+                button.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            // Remettre l'état du bouton à son état initial en cas d'erreur
+            button.textContent = 'Marquer comme terminé';
+            button.classList.remove('bg-gray-400', 'cursor-not-allowed');
+            button.classList.add('bg-blue-500', 'hover:bg-blue-700');
+            button.disabled = false;
+        });
+    }
+}
+</script>
+</script>
 
 </body>
 
